@@ -1,107 +1,113 @@
 <div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
+    <div class="col-md-12 no-gutter">
+        <div class="col-md-9 wf-h1">
             <h1>Workflow</h1>
         </div>
-        <div class="pull-right" style="padding-top:30px">
-            <div class="box-tools" style="display:inline-table">
-              <div class="input-group">
-                  <input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="поиск..." ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
-                  <span class="input-group-addon">поиск</span>
-              </div>
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="поиск..." ng-change="searchDB()" ng-model="searchText" name="table_search" id="wf-search" title="" tooltip="" data-original-title="Min character length is 3">
+                <span class="input-group-addon">поиск</span>
             </div>
         </div>
     </div>
 
-<table class="table table-bordered pagin-table">
-    <thead>
-        <tr>
-            <th>№ п/п</th>
-            <th>ПЭС</th>
-            <th>РЭС</th>
-            <th>Населенный Пункт</th>   
-            <th>Кол-во ТП</th>
-            <th>1ф</th>
-            <th>3ф</th>
-            <th>3ф балансный</th>
-            <th>Кол-во ПУ</th>
-            <th>Отчет ППО</th>
-            <th>План-график производства</th>
-            <th>ТРП</th>
-            <th>Смета</th>
-            <th>КС-2</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr dir-paginate="value in data | itemsPerPage:10" total-items="totalItems">
-            <td>{{ $index + item_num }}</td>
-            <td>{{ value.pes }}</td>
-            <td>{{ value.res_name }}</td>
-            <td>{{ value.location_name }}</td>
-            <td>{{ value.plan_fiz18 }}</td>
-            <td>{{ value.total_smr }}</td>
-            <td>{{ value.total_1f }}</td>
-            <td>{{ value.total_3f }}</td>
-            <td>{{ value.total_tp }}</td>
-    
-            <!-- Отчет ППО -->
-            <td>
-            <select ng-model="status_select[value.location_id]" ng-change="status_update('report_ppo')" class="status-select">
-                <option disabled value="">&#8212;</option>
-                <option ng-repeat="s in status" 
-                        ng-selected="s.status_id == value.report_ppo"
-                        value="{{ s.status_id }}">{{ s.status_name }}
-                </option>
-            </select>
-            </td>
+    <div class="col-md-12 wf-table">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>№ п/п</th>
+                    <th>ПЭС</th>
+                    <th>РЭС</th>
+                    <th>Населенный Пункт</th>   
+                    <th>Кол-во ТП</th>
+                    <th>1ф</th>
+                    <th>3ф</th>
+                    <th>3ф балансный</th>
+                    <th>Кол-во ПУ</th>
+                    <th>Отчет ППО</th>
+                    <th>План-график производства</th>
+                    <th>ТРП</th>
+                    <th>Смета</th>
+                    <th>КС-2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr dir-paginate="value in data | itemsPerPage:10" total-items="totalItems">
+                    <td>{{ $index + item_num }}</td>
+                    <td>{{ value.pes }}</td>
+                    <td>{{ value.res_name }}</td>
+                    <td>{{ value.location_name }}</td>
+                    <td>{{ value.plan_fiz18 }}</td>
+                    <td>{{ value.total_smr }}</td>
+                    <td>{{ value.total_1f }}</td>
+                    <td>{{ value.total_3f }}</td>
+                    <td>{{ value.total_tp }}</td>
+
+                    <!-- Отчет ППО -->
+                    <td>
+                    <select ng-model="statusSelect[value.location_id]" ng-change="statusUpdate('report_ppo')" class="status-select">
+                        <option disabled value="">&#8212;</option>
+                        <option ng-repeat="s in statusGet track by s.status_id" 
+                                ng-selected="s.status_id == value.report_ppo"
+                                value="{{ s.status_id }}">{{ s.status_name }}
+                        </option>
+                    </select>
+                    </td>
+                    
+                    <!-- План-график производства -->
+                    <td>
+                    <select ng-model="statusSelect[value.location_id]" ng-change="statusUpdate('schedule_plan')" class="status-select">
+                        <option disabled value="">&#8212;</option>
+                        <option ng-repeat="s in statusGet track by s.status_id" 
+                                ng-selected="s.status_id == value.schedule_plan"
+                                value="{{ s.status_id }}">{{ s.status_name }}
+                        </option>
+                    </select>
+                    </td>
             
-            <!-- План-график производства -->
-            <td>
-            <select ng-model="status_select[value.location_id]" ng-change="status_update('schedule_plan')" class="status-select">
-                <option disabled value="">&#8212;</option>
-                <option ng-repeat="s in status track by s.status_id" 
-                        ng-selected="s.status_id == value.schedule_plan"
-                        value="{{ s.status_id }}">{{ s.status_name }}
-                </option>
-            </select>
-            </td>
-    
-            <!-- ТРП -->
-            <td>
-            <select ng-model="status_select[value.location_id]" ng-change="status_update('trp')" class="status-select">
-                <option disabled value="">&#8212;</option>
-                <option ng-repeat="s in status track by s.status_id" 
-                        ng-selected="s.status_id == value.trp"
-                        value="{{ s.status_id }}">{{ s.status_name }}
-                </option>
-            </select>
-            </td>
+                    <!-- ТРП -->
+                    <td>
+                    <select ng-model="statusSelect[value.location_id]" ng-change="statusUpdate('trp')" class="status-select">
+                        <option disabled value="">&#8212;</option>
+                        <option ng-repeat="s in statusGet track by s.status_id" 
+                                ng-selected="s.status_id == value.trp"
+                                value="{{ s.status_id }}">{{ s.status_name }}
+                        </option>
+                    </select>
+                    </td>
 
-            <!-- Смета -->
-            <td>
-            <select ng-model="status_select[value.location_id]" ng-change="status_update('estimate')" class="status-select">
-                <option disabled value="">&#8212;</option>
-                <option ng-repeat="s in status track by s.status_id" 
-                        ng-selected="s.status_id == value.estimate"
-                        value="{{ s.status_id }}">{{ s.status_name }}
-                </option>
-            </select>
-            </td>
+                    <!-- Смета -->
+                    <td>
+                    <select ng-model="statusSelect[value.location_id]" ng-change="statusUpdate('estimate')" class="status-select">
+                        <option disabled value="">&#8212;</option>
+                        <option ng-repeat="s in statusGet track by s.status_id" 
+                                ng-selected="s.status_id == value.estimate"
+                                value="{{ s.status_id }}">{{ s.status_name }}
+                        </option>
+                    </select>
+                    </td>
 
-            <!-- КС-2 -->
-            <td>
-            <select ng-model="status_select[value.location_id]" ng-change="status_update('kc2')" class="status-select">
-                <option disabled value="">&#8212;</option>
-                <option ng-repeat="s in status track by s.status_id" 
-                        ng-selected="s.status_id == value.kc2"
-                        value="{{ s.status_id }}">{{ s.status_name }}
-                </option>
-            </select>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                    <!-- КС-2 -->
+                    <td>
+                    <select ng-model="statusSelect[value.location_id]" ng-change="statusUpdate('kc2')" class="status-select">
+                        <option disabled value="">&#8212;</option>
+                        <option ng-repeat="s in statusGet track by s.status_id" 
+                                ng-selected="s.status_id == value.kc2"
+                                value="{{ s.status_id }}">{{ s.status_name }}
+                        </option>
+                    </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-<dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+    <div class="col-md-12">
+        <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+    </div>
 
 </div>
+
+<script>
+$('#wf-search').focus();
+</script>

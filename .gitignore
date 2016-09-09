@@ -1,7 +1,12 @@
 /node_modules
+/resources/assets
 /public/storage
+/public/css
+/public/js
 /vendor
 /.idea
+.env
 Homestead.json
 Homestead.yaml
-.env
+gulpfile.js
+.bowerrc

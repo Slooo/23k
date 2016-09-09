@@ -27,8 +27,8 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::resource('home', 'HomeController');
-    Route::get('workflow', 'HomeController@workflow');
+    Route::resource('home', 'MainController');
+    Route::get('workflow', 'MainController@workflow');
 });
 
 // Templates

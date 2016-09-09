@@ -12,5 +12,28 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    mix.styles([
+    	'../bower/bootstrap/dist/css/bootstrap.min.css',
+    	'../bower/angular-loading-bar/build/loading-bar.min.css',
+    	'main.css',
+    ], 'public/css/app.css');
+
+    mix.scripts([
+    	'../bower/jquery/dist/jquery.min.js',
+    	'../bower/bootstrap/dist/js/bootstrap.min.js',
+    	'../bower/angular/angular.min.js',
+    	'../bower/angular-route/angular-route.min.js',
+    	'../bower/angularUtils-pagination/dirPagination.js',
+    	'../bower/angular-loading-bar/build/loading-bar.min.js',
+
+    	// angular app
+    	'angular/app.js',
+    	'angular/services/myServices.js',
+    	'angular/helper/myHelper.js',
+
+    	// angular controller
+    	'angular/controllers/MainController.js',
+    ], 'public/js/app.js');
+
+    mix.version(['css/app.css', 'js/app.js']);
 });

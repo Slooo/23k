@@ -9,33 +9,15 @@
 
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+		
+	<!-- CSS -->
+	<link rel="stylesheet" href="{{ elixir('css/app.css') }}">
 
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	
-	<!-- Angular JS -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>  
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular-route.min.js"></script>
-
-	<!-- MY App -->
-	<script src="{{ asset('/app/packages/dirPagination.js') }}"></script>
-	<script src="{{ asset('/app/routes.js') }}"></script>
-	<script src="{{ asset('/app/services/myServices.js') }}"></script>
-	<script src="{{ asset('/app/helper/myHelper.js') }}"></script>
-
-	<!-- App Controller -->
-	<script src="{{ asset('/app/controllers/HomeController.js') }}"></script>
+	<!-- JS -->
+	<script src="{{ elixir('js/app.js') }}" type="text/javascript" media="all"></script>
 
 </head>
-<body ng-app="main-App">
+<body ng-app="main">
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
