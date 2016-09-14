@@ -18,12 +18,16 @@ class MainController extends Controller
     public function workflow_search(Request $request)
     {
         $sql = DB::table('location AS l')
-                    ->select('l.location_id', 'c.contractor_name', 'r.pes', 'r.res_name', 'l.location_name', 'l.report_ppo', 'l.schedule_plan', 'l.trp', 'l.estimate', 'l.kc2', DB::raw("(SELECT COUNT(object_id) FROM object o WHERE o.location_id=l.location_id) AS plan_fiz18, (SELECT COUNT(ppo_id) FROM ppo WHERE ppo_location_id=l.location_id AND ppo_customer_type IN ('физ', 'юр', 'тех','мкд')) AS total_smr,(SELECT COUNT(p.ppo_id) FROM ppo p where p.ppo_customer_type IN ('физ', 'юр', 'тех','мкд') AND ppo_contractor_id=r.res_contractor_id AND p.ppo_res_id=r.res_id AND ppo_faza=1 ) AS total_1f, (SELECT COUNT(p.ppo_id) FROM ppo p WHERE p.ppo_customer_type IN ('физ', 'юр', 'тех','мкд') AND ppo_contractor_id=r.res_contractor_id AND p.ppo_res_id=r.res_id AND ppo_faza=3 ) AS total_3f, (SELECT COUNT(tp_id) FROM tp WHERE tp_location_id=l.location_id) AS total_tp"))
+                    ->select('l.location_id', 'c.contractor_name', 'r.pes', 'r.res_name', 'l.location_name', 'l.report_ppo', 'l.schedule_plan', 'l.trp', 'l.estimate', 'l.kc2', DB::raw("(SELECT COUNT(object_id) FROM object o WHERE o.location_id=l.location_id) AS plan_fiz18,
+                        (SELECT COUNT(ppo_id) FROM ppo WHERE ppo_location_id=l.location_id AND ppo_customer_type IN ('физ', 'юр', 'тех','мкд')) AS total_smr,
+                        (SELECT COUNT(p.ppo_id) FROM ppo p where ppo_location_id=l.location_id AND p.ppo_customer_type IN ('физ', 'юр', 'тех','мкд') AND ppo_faza=1 ) AS total_1f,
+                        (SELECT COUNT(p.ppo_id) FROM ppo p WHERE ppo_location_id=l.location_id AND p.ppo_customer_type IN ('физ', 'юр', 'тех','мкд')  AND ppo_faza=3 ) AS total_3f,
+                        (SELECT COUNT(tp_id) FROM tp WHERE tp_location_id=l.location_id) AS total_tp"))
                     ->LeftJoin('res AS r', 'r.res_id', '=', 'l.res_id')
                     ->LeftJoin('contractor AS c', 'c.contractor_id', '=', 'l.location_contractor_id')
                     ->orderBy('r.pes')
                     ->orderBy('r.res_name')
-                    ->orderBy('l.location_id');
+                    ->orderBy('l.location_name');
 
         if($request->get('search'))
         {

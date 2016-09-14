@@ -28,7 +28,7 @@
                         ng-model="selectDB"
                         ng-change="searchColumn(selectDB)"
                         >
-                            <option disabled value="">Контрактор</option>
+                            <option disabled value="">Подрядчик</option>
                         </select>
                     </th>
                     <th>
@@ -62,7 +62,7 @@
                     <th>1ф</th>
                     <th>3ф</th>
                     <th>3ф балансный</th>
-                    <th>Кол-во ПУ</th>
+                    <th>Кол-во ТУ</th>
                     <th>Отчет ППО</th>
                     <th>План-график производства</th>
                     <th>ТРП</th>
@@ -77,11 +77,11 @@
                     <td>{{ value.pes }}</td>
                     <td>{{ value.res_name }}</td>
                     <td>{{ value.location_name }}</td>
-                    <td>{{ value.plan_fiz18 }}</td>
-                    <td>{{ value.total_smr }}</td>
+                    <td>{{ value.total_tp }}</td>
                     <td>{{ value.total_1f }}</td>
                     <td>{{ value.total_3f }}</td>
                     <td>{{ value.total_tp }}</td>
+                    <td>{{ value.total_smr+value.total_tp }}</td>
 
                     <!-- Отчет ППО -->
                     <td>
