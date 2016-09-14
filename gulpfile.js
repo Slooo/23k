@@ -14,6 +14,7 @@ var elixir = require('laravel-elixir');
 elixir(function(mix) {
     mix.styles([
     	'../bower/bootstrap/dist/css/bootstrap.min.css',
+    	'../bower/font-awesome/css/font-awesome.min.css',
     	'../bower/angular-loading-bar/build/loading-bar.min.css',
     	'main.css',
     ], 'public/css/app.css');

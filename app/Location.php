@@ -14,7 +14,7 @@ class Location extends Model
         'location_id', 
         'location_name', 
         'res_id',
-        'contractor_id',
+        'location_contractor_id',
         'location_comment',
         'fiz18',
         'report_ppo',

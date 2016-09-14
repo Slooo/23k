@@ -1,24 +1,63 @@
 <div class="row">
     <div class="col-md-12 no-gutter">
         <div class="col-md-9 wf-h1">
-            <h1>Workflow</h1>
+            <h1>Документооборот</h1>
         </div>
         <div class="col-md-3">
             <div class="input-group">
-                <input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="поиск..." ng-change="searchDB()" ng-model="searchText" name="table_search" id="wf-search" title="" tooltip="" data-original-title="Min character length is 3">
-                <span class="input-group-addon">поиск</span>
+                <input type="text" class="form-control ng-valid ng-dirty" placeholder="поиск..." ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span>
+                    </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a ng-click="getResultsPage(1)">Показать всё</a></li>
+                        </ul>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="col-md-12 wf-table">
         <table class="table table-bordered">
-            <thead>
+            <thead ng-show="getStart">
                 <tr>
-                    <th>№ п/п</th>
-                    <th>ПЭС</th>
-                    <th>РЭС</th>
-                    <th>Населенный Пункт</th>   
+                    <th>№</th>
+                    <th>
+                        <select
+                        ng-options="c as c.contractor_name for c in getStart.contractor"
+                        ng-model="selectDB"
+                        ng-change="searchColumn(selectDB)"
+                        >
+                            <option disabled value="">Контрактор</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select
+                        ng-options="p as p.pes for p in getStart.pes"
+                        ng-model="selectDB"
+                        ng-change="searchColumn(selectDB)"
+                        >
+                            <option disabled value="">ПЭС</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select 
+                        ng-options="r as r.res_name for r in getStart.res_name"
+                        ng-model="selectDB"
+                        ng-change="searchColumn(selectDB)"
+                        >
+                            <option disabled value="">РЭС</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select 
+                        ng-options="l as l.location_name for l in getStart.location"
+                        ng-model="selectDB"
+                        ng-change="searchColumn(selectDB)"
+                        >
+                            <option disabled value="">Населенный Пункт</option>
+                        </select>
+                    </th>   
                     <th>Кол-во ТП</th>
                     <th>1ф</th>
                     <th>3ф</th>
@@ -31,9 +70,10 @@
                     <th>КС-2</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr dir-paginate="value in data | itemsPerPage:10" total-items="totalItems">
+            <tbody ng-show="checkShowHide">
+                <tr dir-paginate="value in data | itemsPerPage:70" total-items="totalItems">
                     <td>{{ $index + item_num }}</td>
+                    <td>{{ value.contractor_name }}</td>
                     <td>{{ value.pes }}</td>
                     <td>{{ value.res_name }}</td>
                     <td>{{ value.location_name }}</td>
@@ -53,7 +93,7 @@
                         </option>
                     </select>
                     </td>
-                    
+
                     <!-- План-график производства -->
                     <td>
                     <select ng-model="statusSelect[value.location_id]" ng-change="statusUpdate('schedule_plan')" class="status-select">
@@ -64,7 +104,7 @@
                         </option>
                     </select>
                     </td>
-            
+
                     <!-- ТРП -->
                     <td>
                     <select ng-model="statusSelect[value.location_id]" ng-change="statusUpdate('trp')" class="status-select">
@@ -103,11 +143,11 @@
     </div>
 
     <div class="col-md-12">
-        <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+        <dir-pagination-controls class="pull-right" on-page-change="getResultsPage(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
     </div>
 
 </div>
 
 <script>
-$('#wf-search').focus();
+    $('#wf-search').focus();
 </script>
