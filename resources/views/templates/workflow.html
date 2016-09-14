@@ -58,13 +58,17 @@
                             <option disabled value="">Населенный Пункт</option>
                         </select>
                     </th>   
+                    <th>План физ18</th>
                     <th>Кол-во ТП</th>
                     <th>1ф</th>
                     <th>3ф</th>
-                    <th>3ф балансный</th>
                     <th>Кол-во ТУ</th>
+                    <th>Найдено по физ18</th>
+                    <th>Не найдено</th>
+                    <th>Вне физ18</th>
+                    <th>Не иден-о</th>
                     <th>Отчет ППО</th>
-                    <th>План-график производства</th>
+                    <th>ПГП</th>
                     <th>ТРП</th>
                     <th>Смета</th>
                     <th>КС-2</th>
@@ -77,11 +81,16 @@
                     <td>{{ value.pes }}</td>
                     <td>{{ value.res_name }}</td>
                     <td>{{ value.location_name }}</td>
+                    <td>{{ value.plan_fiz18 }}</td>
                     <td>{{ value.total_tp }}</td>
                     <td>{{ value.total_1f }}</td>
                     <td>{{ value.total_3f }}</td>
-                    <td>{{ value.total_tp }}</td>
-                    <td>{{ value.total_smr+value.total_tp }}</td>
+                    <td>{{ value.total_tp+value.total_smr }}</td>
+                    <td>{{ value.total_found_fiz18 }}</td>
+                    <td>{{ value.total_not_found }}</td>
+                    <td>{{ value.total_ppo_vne18 }}</td>
+                    <td>{{ value.total_hbz }}</td>
+
 
                     <!-- Отчет ППО -->
                     <td>
