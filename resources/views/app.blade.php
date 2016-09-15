@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" ng-app="main">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,7 +17,7 @@
 	<script src="{{ elixir('js/app.js') }}" type="text/javascript" media="all"></script>
 
 </head>
-<body ng-app="main">
+<body>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
