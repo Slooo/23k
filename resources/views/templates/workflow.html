@@ -22,7 +22,7 @@
             <thead ng-show="getStart">
                 <tr>
                     <th>№</th>
-                    <th>
+                    <th>Подрядчик
                         <select
                         ng-options="c as c.contractor_name for c in getStart.contractor"
                         ng-model="selectDB"
@@ -31,7 +31,7 @@
                             <option disabled value="">Подрядчик</option>
                         </select>
                     </th>
-                    <th>
+                    <th>ПЭС
                         <select
                         ng-options="p as p.pes for p in getStart.pes"
                         ng-model="selectDB"
@@ -40,7 +40,7 @@
                             <option disabled value="">ПЭС</option>
                         </select>
                     </th>
-                    <th>
+                    <th>РЭС
                         <select 
                         ng-options="r as r.res_name for r in getStart.res_name"
                         ng-model="selectDB"
@@ -49,7 +49,7 @@
                             <option disabled value="">РЭС</option>
                         </select>
                     </th>
-                    <th>
+                    <th>Населенный Пункт
                         <select 
                         ng-options="l as l.location_name for l in getStart.location"
                         ng-model="selectDB"
