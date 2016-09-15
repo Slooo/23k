@@ -41,7 +41,8 @@ class MainController extends Controller
         				->orWhere("r.res_name", "LIKE", "%{$request->get('search')}%")
         				->orWhere("l.location_name", "LIKE", "%{$request->get('search')}%")
                         ->orWhere("c.contractor_name", "LIKE", "%{$request->get('search')}%")
-        				->paginate(70);
+                        ->get();
+        				#->paginate(70);
         }
 
         elseif($request->get('column'))
@@ -51,10 +52,11 @@ class MainController extends Controller
                         ->orWhere("r.res_name", "=", $request->get('column'))
                         ->orWhere("l.location_name", "=", $request->get('column'))
                         ->orWhere("c.contractor_name", "=", $request->get('column'))
-                        ->paginate(70);
+                        ->get();
+                        #->paginate(70);
         } else {
-        	$location = $sql
-        				->paginate(70);
+        	$location = $sql->get();
+        				#->paginate(70);
         }
 
         $status = DB::table('status AS s')

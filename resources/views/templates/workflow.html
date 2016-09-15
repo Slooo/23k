@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="col-md-12 wf-table">
+    <div class="col-md-12">
         <table class="table table-bordered">
             <thead ng-show="getStart">
                 <tr>
@@ -75,8 +75,8 @@
                 </tr>
             </thead>
             <tbody ng-show="checkShowHide">
-                <tr dir-paginate="value in data | itemsPerPage:70" total-items="totalItems">
-                    <td>{{ $index + item_num }}</td>
+                <tr ng-repeat="value in data">
+                    <td>{{ $index+1 }}</td>
                     <td>{{ value.contractor_name }}</td>
                     <td>{{ value.pes }}</td>
                     <td>{{ value.res_name }}</td>
@@ -151,12 +151,29 @@
         </table>
     </div>
 
+    <div class="scroll-bar">
+        <div id="scroll-up"><i class="fa fa-3x fa-arrow-circle-up" aria-hidden="true"></i></div>
+        <div id="scroll-down"><i class="fa fa-3x fa-arrow-circle-down" aria-hidden="true"></i></div>
+    </div>
+
+    <!--
     <div class="col-md-12">
         <dir-pagination-controls class="pull-right" on-page-change="getResultsPage(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
     </div>
+    -->
 
 </div>
 
 <script>
     $('#wf-search').focus();
+
+    $('#scroll-up').click(function(e){
+        e.preventDefault();
+        $('html, body').stop().animate({scrollTop:0}, '500', 'swing');
+    });
+
+    $('#scroll-down').click(function(e){
+        e.preventDefault();
+        $("html, body").animate({ scrollTop: $(document).height() }, 500);
+    });
 </script>

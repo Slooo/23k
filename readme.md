@@ -13,6 +13,12 @@ Project created in [Laravel Framework version 5.2] (https://laravel.com/docs/5.2
 * php artisan key:generate
 * php artisan migrate
 * php artisan db:seed
+
+### server machine
+* chmod 777 resources
+* chmod 777 storage
+
+### local machine
 * php artisan serve
 
 **Done, yep!**
