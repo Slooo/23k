@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-12 no-gutter">
+        <div class="col-md-9 wf-h1">
+            <h1>СМР</h1>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead ng-show="getStart">
+                <tr>
+                    <th>№</th>
+                    <th>Подрядчик
+                        <select
+                        ng-options="c as c.contractor_name for c in getStart.contractor"
+                        ng-model="selectDB"
+                        ng-change="searchColumn(selectDB)"
+                        >
+                            <option disabled value="">Подрядчик</option>
+                        </select>
+                    </th>
+                    <th>ПЭС</th>
+                    <th>РЭС</th>
+                    <th>Населенный Пункт</th>   
+                    <th>Тип оборудования</th>
+                    <th>План по ППО</th>
+                    <th>Итого СМР</th>
+					<th ng-show="checkShowHide" ng-repeat="date in data.smr_date">
+						{{ date }}
+					</th>
+                </tr>
+            </thead>
+            <tbody ng-show="checkShowHide" ng-repeat="equipment in data.smr_type_equipment">
+                <tr ng-repeat="value in data.data">
+                    <td>{{ $index+1 }}</td>
+                    <td>{{ value.contractor_name }}</td>
+                    <td>{{ value.pes }}</td>
+                    <td>{{ value.res_name }}</td>
+                    <td>{{ value.location_name }}</td>
+					<td>{{ equipment }}</td>
+					<td>{{ value.location_id }}</td>
+					<td></td>
+					<td ng-repeat="date in data.smr_date">
+						<input type="text" data-smr-date="{{ date }}" ng-keypress="smrInput($event)">
+					</td>
+				</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+input:focus{
+    outline: none;
+}
+</style>

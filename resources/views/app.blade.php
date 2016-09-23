@@ -34,6 +34,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="#/">Главная</a></li>
 					<li><a href="#/workflow">Документооборот</a></li>
+					<li><a href="#/smr">СМР</a></li>
 				</ul>
 			</div>
 		</div>
@@ -41,9 +42,27 @@
 
 	<div class="container-fluid">
 		<ng-view></ng-view>
+		<div class="scroll-bar">
+		    <div id="scroll-up"><i class="fa fa-3x fa-arrow-circle-up" aria-hidden="true"></i></div>
+		    <div id="scroll-down"><i class="fa fa-3x fa-arrow-circle-down" aria-hidden="true"></i></div>
+		</div>
 	</div>
 
 	<!-- Scripts -->
+	<script>
+	    $('#wf-search').focus();
+
+	    $('#scroll-up').click(function(e){
+	        e.preventDefault();
+	        $('html, body').stop().animate({scrollTop:0}, '500', 'swing');
+	    });
+
+	    $('#scroll-down').click(function(e){
+	        e.preventDefault();
+	        $("html, body").animate({ scrollTop: $(document).height() }, 500);
+	    });
+
+	</script>
 
 </body>
 </html>
