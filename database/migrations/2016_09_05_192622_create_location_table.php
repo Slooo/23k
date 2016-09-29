@@ -16,7 +16,7 @@ class CreateLocationTable extends Migration
             $table->increments('location_id');
             $table->string('location_name')->nullable();
             $table->integer('res_id')->default(0);
-            $table->integer('location_contractor_id')->default(0)
+            $table->integer('location_contractor_id')->default(0);
             $table->text('location_comment');
             $table->integer('fiz18')->default(0);
             $table->integer('report_ppo')->unsigned();
