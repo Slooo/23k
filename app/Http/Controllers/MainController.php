@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use Illuminate\support\Facades\DB;
 use Carbon\Carbon;
 
 
@@ -18,11 +18,11 @@ use App\Ppo;
 
 class MainController extends Controller
 {
-    # workflow
-    public function workflow_search(Request $request)
+    # main request in database
+    public function search(Request $request)
     {
         $sql = DB::table('location AS l')
-                    ->select('l.location_id', 'c.contractor_name', 'c.contractor_id', 'r.pes', 'r.res_name', 'l.location_name', 'l.report_ppo', 'l.schedule_plan', 'l.trp', 'l.estimate', 'l.kc2',
+                        ->select('l.location_id', 'l.location_name', 'c.contractor_name', 'c.contractor_id', 'r.pes', 'r.res_name', 'l.report_ppo', 'l.schedule_plan', 'l.trp', 'l.estimate', 'l.kc2',
                     DB::raw("
                         (SELECT COUNT(object_id) FROM object o WHERE o.location_id=l.location_id) 
                         AS plan_fiz18,
@@ -51,53 +51,162 @@ class MainController extends Controller
                         (SELECT COUNT(tp_id) FROM tp WHERE tp_location_id=l.location_id) 
                         AS total_tp"
                     ))
-                    ->LeftJoin('res AS r', 'r.res_id', '=', 'l.res_id')
-                    ->LeftJoin('contractor AS c', 'c.contractor_id', '=', 'l.location_contractor_id')
-                    ->orderBy('r.pes')
-                    ->orderBy('r.res_name')
-                    ->orderBy('l.location_name');
+                        ->LeftJoin('res AS r', 'r.res_id', '=', 'l.res_id')
+                        ->LeftJoin('contractor AS c', 'c.contractor_id', '=', 'l.location_contractor_id')
+                        ->orderBy('r.pes')
+                        ->orderBy('r.res_name')
+                        ->orderBy('l.location_name');
 
-        if($request->get('search'))
-        {
-        	$data = $sql
-        				->where("r.pes", "LIKE", "%{$request->get('search')}%")
-        				->orWhere("r.res_name", "LIKE", "%{$request->get('search')}%")
-        				->orWhere("l.location_name", "LIKE", "%{$request->get('search')}%")
+                $data = [];
+
+                if($request->get('search'))
+                {
+                    $data['data'] = $sql
+                        ->where("r.pes", "LIKE", "%{$request->get('search')}%")
+                        ->orWhere("r.res_name", "LIKE", "%{$request->get('search')}%")
+                        ->orWhere("l.location_name", "LIKE", "%{$request->get('search')}%")
                         ->orWhere("c.contractor_name", "LIKE", "%{$request->get('search')}%")
                         ->get();
-        }
+                }
 
-        elseif($request->get('column'))
-        {
-            $data = $sql
+                elseif($request->get('column'))
+                {
+                    $data['data'] = $sql
                         ->where("r.pes", "=", $request->get('column'))
                         ->orWhere("r.res_name", "=", $request->get('column'))
                         ->orWhere("l.location_name", "=", $request->get('column'))
                         ->orWhere("c.contractor_name", "=", $request->get('column'))
                         ->get();
-        } else {
-        	$data = $sql->get();
-        }
+                }
+
+                elseif($request->get('smr'))
+                {
+                    # array equipment
+                    $equipment_type = ['1Ф', '3Ф', '3Б', 'УСПД', 'Акт допуска'];
+                    $equipment_count = count($equipment_type);
+
+                    # array date
+                    $start = Carbon::now()->subDay(6);
+                    for ($i = 0; $i < 7; $i++) {
+                        $date_week[] = $start->copy()->toDateString();
+                        $start->addDay();
+                    }
+
+                    $main_table = $sql
+                            ->where("c.contractor_name", "=", $request->get('smr'))
+                            ->get();
+
+                    $smr_table = DB::table('smr')
+                            ->select('*')
+                            ->orderBy('smr_published_at', 'ASC')
+                            ->get();
+                    
+                    foreach($main_table as $row):
+                        foreach($equipment_type as $eq):
+
+                            $col[] = $row->location_id;
+                            $col[] = $row->location_name;
+                            $col[] = $row->contractor_id;
+                            $col[] = $row->contractor_name;
+                            $col[] = $row->pes;
+                            $col[] = $row->res_name;
+                            $col[] = $row->report_ppo;
+                            $col[] = $row->schedule_plan;
+                            $col[] = $row->trp;
+                            $col[] = $row->estimate;
+                            $col[] = $row->kc2;
+                            $col[] = $eq;
+
+                            foreach($smr_table as $smr):
+                                foreach($date_week as $de):
+
+                                $d1 = Carbon::parse($smr->smr_published_at)->toDateString();
+                                $d2 = Carbon::parse($de)->toDateString();
+
+                                if($smr->smr_contractor_id == $row->contractor_id 
+                                    && $smr->smr_location_id == $row->location_id
+                                    && $d1 == $d2
+                                    && $smr->smr_type_equipment == $eq)
+                                {
+                                    $date[] = $d1;
+                                    $date[] = $smr->smr_quantity;
+                                    $date[] = $smr->smr_type_equipment;
+                                } else {
+                                    $date[] = 0;
+                                    $date[] = 0;
+                                    $date[] = 0;
+                                }
+
+                                endforeach;
+                            endforeach;
+                        endforeach;
+                    endforeach;
+
+                    $smr_keys = ['date', 'qty', 'equipment'];
+                    $smr_values = array_chunk(array_filter($date), 3);
+
+                    $smr_count_values = count($smr_values);
+                    for ($i = 0; $i < $smr_count_values; $i++) {
+                       $smr_data[] = array_combine($smr_keys, $smr_values[$i]);
+                    }
+
+                    $smr_count = count($smr_data);
+
+                    $all_key = [
+                        'location_id',
+                        'location_name',
+                        'contractor_id',
+                        'contractor_name',
+                        'pes',
+                        'res_name',
+                        'report_ppo',
+                        'schedule_plan',
+                        'trp',
+                        'estimate',
+                        'kc2',
+                        'equipment',
+                    ];
+
+                    $all_values = array_chunk($col, 12);
+
+                    for ($i = 0; $i < $equipment_count; $i++) {
+                        $all_data[] = array_combine($all_key, $all_values[$i]);
+                    }
+
+                    # add date_smr > all_data
+                    for ($i = 0; $i < $smr_count; $i++) 
+                    {
+                        if(array_key_exists($i, $smr_data) && array_key_exists($i, $all_data)) 
+                        {
+                            $eq = $all_data[$i]['equipment'];
+
+                            $arr = array_filter($smr_data, function($a) use($eq) {
+                                return $a["equipment"] == $eq;
+                            });
+
+                            $all_data[$i]['date_smr'] = $arr;                            
+                        }
+                    }
+
+                    $data = array_merge_recursive([
+                        'data' => $all_data, 
+                        'date_week' => $date_week,
+                    ]);
+                }
+
+                else 
+                {
+                    $data['data'] = $sql->get();
+                }
 
         $status = DB::table('status AS s')
         		  ->select('s.status_id', 's.status_name')
         		  ->get();
 
-        $start = Carbon::now()->subDay(6);
-
-        for ($i = 0; $i < 7; $i++) {
-            $date[] = $start->copy()->toDateTimeString();
-            $start->addDay();
-        }
-
-        // в зависимости от запроса выводить нужную часть.
-
-        $type_equipment = ['1Ф', '3Ф', '3Б', 'УСПД'];
-
-        return response(['data' => $data, 'status' => $status, 'smr_date' => $date, 'smr_type_equipment' => $type_equipment]);
+        return response($data);
     }
 
-    public function workflow()
+    public function main()
     {
         $data['location']   = Location::groupBy('location_name')->select('location_name')->get();
         $data['pes']        = Res::groupBy('pes')->select('pes')->get();

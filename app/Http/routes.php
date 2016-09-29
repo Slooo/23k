@@ -27,12 +27,12 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::resource('main', 'MainController');
-    Route::get('workflow', 'MainController@workflow');
+    #Route::resource('main', 'MainController');
+    Route::get('main', 'MainController@main');
     Route::get('ppo', 'MainController@ppo');
     Route::get('smr', 'MainController@smr');
     Route::post('create_smr', 'MainController@create_smr');
-    Route::get('workflow_search', 'MainController@workflow_search');
+    Route::get('search', 'MainController@search');
 });
 
 // Templates

@@ -25,23 +25,35 @@
                     <th>Тип оборудования</th>
                     <th>План по ППО</th>
                     <th>Итого СМР</th>
-					<th ng-show="checkShowHide" ng-repeat="date in data.smr_date">
+					<th ng-show="checkShowHide" ng-repeat="date in data.date_week">
 						{{ date }}
 					</th>
                 </tr>
             </thead>
-            <tbody ng-show="checkShowHide" ng-repeat="equipment in data.smr_type_equipment">
+            <tbody ng-show="checkShowHide">
                 <tr ng-repeat="value in data.data">
                     <td>{{ $index+1 }}</td>
                     <td>{{ value.contractor_name }}</td>
                     <td>{{ value.pes }}</td>
                     <td>{{ value.res_name }}</td>
                     <td>{{ value.location_name }}</td>
-					<td>{{ equipment }}</td>
+					<td>{{ value.equipment }}</td>
 					<td>{{ value.location_id }}</td>
 					<td></td>
-					<td ng-repeat="date in data.smr_date">
-						<input type="text" data-smr-date="{{ date }}" ng-keypress="smrInput($event)">
+					<td ng-repeat="date in data.date_week">
+					<input
+						ng-repeat="row in value.date_smr"
+						ng-if="row.date == date"
+						data-smr-date="{{ date }}"
+						type="text"
+						value="{{ row.qty }}"
+					>
+					<input 
+						data-smr-date="{{ date }}"
+						type="text"
+						value="0"
+						ng-keypress="smrInput($event)"
+					>
 					</td>
 				</tr>
             </tbody>
