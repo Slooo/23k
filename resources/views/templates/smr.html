@@ -40,18 +40,11 @@
 					<td>{{ value.equipment }}</td>
 					<td>{{ value.location_id }}</td>
 					<td></td>
-					<td ng-repeat="date in data.date_week">
+					<td ng-repeat="row in value.date_smr">
 					<input
-						ng-repeat="row in value.date_smr"
-						ng-if="row.date == date"
-						data-smr-date="{{ date }}"
+						data-smr-date="{{ row.date }}"
 						type="text"
 						value="{{ row.qty }}"
-					>
-					<input 
-						data-smr-date="{{ date }}"
-						type="text"
-						value="0"
 						ng-keypress="smrInput($event)"
 					>
 					</td>

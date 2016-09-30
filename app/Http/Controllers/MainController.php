@@ -83,13 +83,17 @@ class MainController extends Controller
                 {
                     # array equipment
                     $equipment_type = ['1Ф', '3Ф', '3Б', 'УСПД', 'Акт допуска'];
-                    $equipment_count = count($equipment_type);
 
                     # array date
                     $start = Carbon::now()->subDay(6);
                     for ($i = 0; $i < 7; $i++) {
                         $date_week[] = $start->copy()->toDateString();
                         $start->addDay();
+
+                        # create empty array date_smr
+                        $date[$date_week[$i]]['date'] = $date_week[$i];
+                        $date[$date_week[$i]]['qty'] = 0;
+                        $date[$date_week[$i]]['equipment'] = 0;
                     }
 
                     $main_table = $sql
@@ -101,95 +105,57 @@ class MainController extends Controller
                             ->orderBy('smr_published_at', 'ASC')
                             ->get();
                     
+                    $i = 0; $s = 0;
                     foreach($main_table as $row):
                         foreach($equipment_type as $eq):
+                            $i++;
 
-                            $col[] = $row->location_id;
-                            $col[] = $row->location_name;
-                            $col[] = $row->contractor_id;
-                            $col[] = $row->contractor_name;
-                            $col[] = $row->pes;
-                            $col[] = $row->res_name;
-                            $col[] = $row->report_ppo;
-                            $col[] = $row->schedule_plan;
-                            $col[] = $row->trp;
-                            $col[] = $row->estimate;
-                            $col[] = $row->kc2;
-                            $col[] = $eq;
+                            $col[$i]['location_id'] = $row->location_id;
+                            $col[$i]['location_name'] = $row->location_name;
+                            $col[$i]['contractor_id'] = $row->contractor_id;
+                            $col[$i]['contractor_name'] = $row->contractor_name;
+                            $col[$i]['pes'] = $row->pes;
+                            $col[$i]['res_name'] = $row->res_name;
+                            $col[$i]['report_ppo'] = $row->report_ppo;
+                            $col[$i]['schedule_plan'] = $row->schedule_plan;
+                            $col[$i]['trp'] = $row->trp;
+                            $col[$i]['estimate'] = $row->estimate;
+                            $col[$i]['kc2'] = $row->kc2;
+                            $col[$i]['equipment'] = $eq;
 
-                            foreach($smr_table as $smr):
-                                foreach($date_week as $de):
+                            if(count($smr_table)) {
+                            foreach($date_week as $de):
+                                foreach($smr_table as $smr):
+                                    $s++;
 
-                                $d1 = Carbon::parse($smr->smr_published_at)->toDateString();
-                                $d2 = Carbon::parse($de)->toDateString();
+                                    $d1 = Carbon::parse($smr->smr_published_at)->toDateString();
+                                    $d2 = Carbon::parse($de)->toDateString();
 
-                                if($smr->smr_contractor_id == $row->contractor_id 
-                                    && $smr->smr_location_id == $row->location_id
-                                    && $d1 == $d2
-                                    && $smr->smr_type_equipment == $eq)
-                                {
-                                    $date[] = $d1;
-                                    $date[] = $smr->smr_quantity;
-                                    $date[] = $smr->smr_type_equipment;
-                                } else {
-                                    $date[] = 0;
-                                    $date[] = 0;
-                                    $date[] = 0;
-                                }
-
+                                    if($smr->smr_contractor_id == $row->contractor_id 
+                                        && $smr->smr_location_id == $row->location_id
+                                        && $d1 == $d2
+                                        && $smr->smr_type_equipment == $eq)
+                                    {
+                                        $date_smr[$d1]['date'] = $d1;
+                                        $date_smr[$d1]['qty'] = $smr->smr_quantity;
+                                        $date_smr[$d1]['equipment'] = $smr->smr_type_equipment;
+                                    }
                                 endforeach;
+                            
                             endforeach;
+                            $col[$i]['date_smr'] = array_filter($date_smr, function($a) use($eq) {
+                                return $a['equipment'] == $eq;
+                            });
+                                $col[$i]['date_smr'] = array_replace($date, $col[$i]['date_smr']);
+                            } else {
+                                $col[$i]['date_smr'] = $date;
+                            }
+
                         endforeach;
                     endforeach;
 
-                    $smr_keys = ['date', 'qty', 'equipment'];
-                    $smr_values = array_chunk(array_filter($date), 3);
-
-                    $smr_count_values = count($smr_values);
-                    for ($i = 0; $i < $smr_count_values; $i++) {
-                       $smr_data[] = array_combine($smr_keys, $smr_values[$i]);
-                    }
-
-                    $smr_count = count($smr_data);
-
-                    $all_key = [
-                        'location_id',
-                        'location_name',
-                        'contractor_id',
-                        'contractor_name',
-                        'pes',
-                        'res_name',
-                        'report_ppo',
-                        'schedule_plan',
-                        'trp',
-                        'estimate',
-                        'kc2',
-                        'equipment',
-                    ];
-
-                    $all_values = array_chunk($col, 12);
-
-                    for ($i = 0; $i < $equipment_count; $i++) {
-                        $all_data[] = array_combine($all_key, $all_values[$i]);
-                    }
-
-                    # add date_smr > all_data
-                    for ($i = 0; $i < $smr_count; $i++) 
-                    {
-                        if(array_key_exists($i, $smr_data) && array_key_exists($i, $all_data)) 
-                        {
-                            $eq = $all_data[$i]['equipment'];
-
-                            $arr = array_filter($smr_data, function($a) use($eq) {
-                                return $a["equipment"] == $eq;
-                            });
-
-                            $all_data[$i]['date_smr'] = $arr;                            
-                        }
-                    }
-
                     $data = array_merge_recursive([
-                        'data' => $all_data, 
+                        'data' => $col, 
                         'date_week' => $date_week,
                     ]);
                 }
