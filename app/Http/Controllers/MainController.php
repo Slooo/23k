@@ -81,6 +81,9 @@ class MainController extends Controller
 
                 elseif($request->get('smr'))
                 {
+                    # settings
+                    $date_week = []; $date = []; $col = []; $date_smr = []; $i = 0; $s = 0;
+
                     # array equipment
                     $equipment_type = ['1Ф', '3Ф', '3Б', 'УСПД', 'Акт допуска'];
 
@@ -105,7 +108,6 @@ class MainController extends Controller
                             ->orderBy('smr_published_at', 'ASC')
                             ->get();
                     
-                    $i = 0; $s = 0;
                     foreach($main_table as $row):
                         foreach($equipment_type as $eq):
                             $i++;
@@ -141,8 +143,8 @@ class MainController extends Controller
                                         $date_smr[$d1]['equipment'] = $smr->smr_type_equipment;
                                     }
                                 endforeach;
-                            
                             endforeach;
+
                             $col[$i]['date_smr'] = array_filter($date_smr, function($a) use($eq) {
                                 return $a['equipment'] == $eq;
                             });
@@ -153,6 +155,8 @@ class MainController extends Controller
 
                         endforeach;
                     endforeach;
+
+                    sort($col);
 
                     $data = array_merge_recursive([
                         'data' => $col, 
