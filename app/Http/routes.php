@@ -26,21 +26,33 @@ Route::get('/', function () {
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
-    #Route::resource('main', 'MainController');
+/*
+Route::group(['prefix' => 'api'], function()
+{
+    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+    Route::post('authenticate', 'AuthenticateController@authenticate');
+});
+*/
+
+#'middleware' => 'web', 
+Route::group(['prefix' => 'api'], function () {
     Route::get('main', 'MainController@main');
     Route::get('ppo', 'MainController@ppo');
     Route::get('smr', 'MainController@smr');
     Route::post('create_smr', 'MainController@create_smr');
     Route::get('search', 'MainController@search');
+
+    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+    Route::post('authenticate', 'AuthenticateController@authenticate');
+
 });
 
 // Templates
-Route::group(array('prefix'=>'/templates/'),function(){
-    Route::get('{template}', array( function($template)
+Route::group(['prefix' => '/templates/'], function(){
+    Route::get('{template}', [function($template)
     {
         $template = str_replace(".html","",$template);
         View::addExtension('html','php');
         return View::make('templates.'.$template);
-    }));
+    }]);
 });
