@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\support\Facades\DB;
 use Carbon\Carbon;
 
-
 # Models
 use App\Location;
 use App\Res;
