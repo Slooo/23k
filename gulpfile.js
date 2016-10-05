@@ -24,7 +24,6 @@ elixir(function(mix) {
     	'../bower/bootstrap/dist/js/bootstrap.min.js',
     	'../bower/angular/angular.min.js',
     	'../bower/angular-route/angular-route.min.js',
-    	'../bower/angularUtils-pagination/dirPagination.js',
     	'../bower/angular-loading-bar/build/loading-bar.min.js',
 
     	// angular app

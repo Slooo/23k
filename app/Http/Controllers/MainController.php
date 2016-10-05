@@ -61,7 +61,7 @@ class MainController extends Controller
 
                 if($request->get('search'))
                 {
-                    $data['data'] = $sql
+                    $data = $sql
                         ->where("r.pes", "LIKE", "%{$request->get('search')}%")
                         ->orWhere("r.res_name", "LIKE", "%{$request->get('search')}%")
                         ->orWhere("l.location_name", "LIKE", "%{$request->get('search')}%")
@@ -71,7 +71,7 @@ class MainController extends Controller
 
                 elseif($request->get('column'))
                 {
-                    $data['data'] = $sql
+                    $data = $sql
                         ->where("r.pes", "=", $request->get('column'))
                         ->orWhere("r.res_name", "=", $request->get('column'))
                         ->orWhere("l.location_name", "=", $request->get('column'))
@@ -166,7 +166,7 @@ class MainController extends Controller
 
                 else 
                 {
-                    $data['data'] = $sql->get();
+                    $data = $sql->get();
                 }
 
         $status = DB::table('status AS s')
