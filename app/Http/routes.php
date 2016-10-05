@@ -35,15 +35,15 @@ Route::group(['prefix' => 'api'], function()
 */
 
 #'middleware' => 'web', 
-Route::group(['prefix' => 'api'], function () {
+Route::group(['middleware' => 'web'], function () {
     Route::get('main', 'MainController@main');
     Route::get('ppo', 'MainController@ppo');
     Route::get('smr', 'MainController@smr');
     Route::post('create_smr', 'MainController@create_smr');
     Route::get('search', 'MainController@search');
 
-    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
-    Route::post('authenticate', 'AuthenticateController@authenticate');
+    #Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+    #Route::post('authenticate', 'AuthenticateController@authenticate');
 
 });
 
