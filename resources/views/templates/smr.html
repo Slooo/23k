@@ -25,7 +25,7 @@
                     <th>Тип оборудования</th>
                     <th>План по ППО</th>
                     <th>Итого СМР</th>
-					<th ng-show="checkShowHide" ng-repeat="date in data.date_week">
+					<th ng-show="checkShowHide" ng-repeat="date in data.date_week_seven">
 						{{ date }}
 					</th>
                 </tr>
@@ -43,9 +43,11 @@
 					<td ng-repeat="row in value.date_smr">
 					<input
 						data-smr-date="{{ row.date }}"
-						type="text"
+                        data-smr-id="{{ row.id }}"
+						type="number"
 						value="{{ row.qty }}"
-						ng-keypress="smrInput($event)"
+						ng-keypress="smrInputKeyPress($event)"
+                        ng-blur="smrInputFocusOut($event)"
 					>
 					</td>
 				</tr>

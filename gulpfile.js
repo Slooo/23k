@@ -20,6 +20,7 @@ elixir(function(mix) {
     ], 'public/css/app.css');
 
     mix.scripts([
+        // all
     	'../bower/jquery/dist/jquery.min.js',
     	'../bower/bootstrap/dist/js/bootstrap.min.js',
     	'../bower/angular/angular.min.js',

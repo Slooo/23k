@@ -40,6 +40,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('ppo', 'MainController@ppo');
     Route::get('smr', 'MainController@smr');
     Route::post('create_smr', 'MainController@create_smr');
+    Route::post('update_smr', 'MainController@update_smr');
     Route::get('search', 'MainController@search');
 
     #Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);

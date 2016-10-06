@@ -50,6 +50,7 @@
 
 	<!-- Scripts -->
 	<script>
+	
 	    $('#wf-search').focus();
 
 	    $('#scroll-up').click(function(e){

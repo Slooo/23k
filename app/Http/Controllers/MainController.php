@@ -90,12 +90,14 @@ class MainController extends Controller
                     $start = Carbon::now()->subDay(6);
                     for ($i = 0; $i < 7; $i++) {
                         $date_week[] = $start->copy()->toDateString();
+                        $date_week_seven[] = $start->copy()->format('d/m/Y');
                         $start->addDay();
 
                         # create empty array date_smr
                         $date[$date_week[$i]]['date'] = $date_week[$i];
                         $date[$date_week[$i]]['qty'] = 0;
                         $date[$date_week[$i]]['equipment'] = 0;
+                        $date[$date_week[$i]]['id'] = 0;
                     }
 
                     $main_table = $sql
@@ -138,8 +140,9 @@ class MainController extends Controller
                                         && $smr->smr_type_equipment == $eq)
                                     {
                                         $date_smr[$d1]['date'] = $d1;
-                                        $date_smr[$d1]['qty'] = $smr->smr_quantity;
+                                        $date_smr[$d1]['qty'] = (int) $smr->smr_quantity;
                                         $date_smr[$d1]['equipment'] = $smr->smr_type_equipment;
+                                        $date_smr[$d1]['id'] = $smr->smr_id;
                                     }
                                 endforeach;
                             endforeach;
@@ -158,8 +161,8 @@ class MainController extends Controller
                     sort($col);
 
                     $data = array_merge_recursive([
-                        'data' => $col, 
-                        'date_week' => $date_week,
+                        'data'      => $col, 
+                        'date_week_seven' => $date_week_seven,
                     ]);
                 }
 
@@ -192,16 +195,22 @@ class MainController extends Controller
         return response(['status' => 'success']);
     }
 
-    # insert smr
     public function create_smr(Request $request)
     {
         $smr = Smr::create($request->all());
         if($smr)
         {
-            return response(['status' => 'success']);
+            return response(['status' => 'success', 'id' => $smr->smr_id]);
         } else {
             return response(['status' => 'error']);
         }
+    }
+
+    public function update_smr(Request $request)
+    {
+        $smr = Smr::find($request->smr_id);
+        $smr->update($request->all());
+        return response(['status' => 'success', 'id' => $smr->smr_id]);
     }
 
     public function ppo()
