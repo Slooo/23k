@@ -1,8 +1,8 @@
 # 23k
 
-Project created in [Laravel Framework version 5.2] (https://laravel.com/docs/5.2)
+Project created in [Laravel Framework version 5.2](https://laravel.com/docs/5.2)
 
-[Developer] (http://codbro.com)
+[Developer](http://codbro.com)
 
 ## Install
 
